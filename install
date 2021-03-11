@@ -1,5 +1,5 @@
 #!/bin/bash -e
-tag=$(basename $(/usr/bin/curl -Ls -o /dev/null -w %{url_effective} https://github.com/MRtrix3/mrtrix3/releases/latest))
+tag=$(basename $(/usr/bin/curl -Ls -o /dev/null -w %{url_effective} http://github.com/MRtrix3/mrtrix3/releases/latest))
 if [ -z "${tag}" ]; then
   echo "ERROR: could not find tag name for latest release ..."
   exit
@@ -40,7 +40,7 @@ if [ ! -d "/usr/local/bin" ]; then
   fi
 fi
 
-url=https://github.com/MRtrix3/mrtrix3/releases/download/${tag}/mrtrix3-macos-${tag}.tar.gz
+url=http://github.com/MRtrix3/mrtrix3/releases/download/${tag}/mrtrix3-macos-${tag}.tar.gz
 
 if [ -z "${url}" ]; then
   echo "ERROR: Could not find tarball of latest release ..."
