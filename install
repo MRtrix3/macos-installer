@@ -91,6 +91,11 @@ for target in $(find ../mrtrix3/bin -maxdepth 1 -type f ! -name "*.*"); do
   ln -sf "${target}"
   echo /usr/local/bin/"$(basename "${target}")" >> /usr/local/mrtrix3/symlinks
 done
+if [ -x /usr/bin/python3 ] && [ ! -x /usr/bin/python ]; then
+  echo "WARNING: Creating symlink from /usr/local/bin/python to /usr/bin/python3 ..."
+  ln -sf /usr/bin/python3 python
+  echo /usr/local/bin/python >> /usr/local/mrtrix3/symlinks
+fi
 
 echo "Creating symlinks in /Applications ..."
 cd /Applications
