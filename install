@@ -88,7 +88,11 @@ echo "Fixing python shebang ..."
 cd /usr/local/mrtrix3/bin
 for f in $(grep -lr '^#!/usr/bin/env python'); do 
   sed -i '' 's|^#!/usr/bin/env python$|#!/usr/bin/python3|' ${f}; 
-done 
+done
+
+echo "Applying patch to show correct version numbers in scripts  ..."
+cd /usr/local/mrtrix3
+curl https://github.com/MRtrix3/mrtrix3/commit/4a293d30e1c0686037ae637f67932d497eb71ee6.patch | sudo patch -p1
 
 echo "Creating symlinks in /usr/local/bin ..."
 cd /usr/local/bin
