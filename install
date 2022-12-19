@@ -84,6 +84,12 @@ echo "Unpacking "${tarball}" to /usr/local/mrtrix3 ..."
 tar oxf "${tarball}" -C /usr/local
 rm "${tarball}"
 
+echo "Fixing python shebang ..."
+cd /usr/local/mrtrix3/bin
+for f in $(grep -lr '^#!/usr/bin/env python'); do 
+  sed -i 's|^#!/usr/bin/env python$|#!/usr/bin/python3|' ${f}; 
+done 
+
 echo "Creating symlinks in /usr/local/bin ..."
 cd /usr/local/bin
 touch /usr/local/mrtrix3/symlinks
