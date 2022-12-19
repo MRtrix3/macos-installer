@@ -92,7 +92,7 @@ done
 
 echo "Applying patch to show correct version numbers in scripts  ..."
 cd /usr/local/mrtrix3
-curl -s https://github.com/MRtrix3/mrtrix3/commit/4a293d30e1c0686037ae637f67932d497eb71ee6.patch | sudo patch -p1
+curl -s https://github.com/MRtrix3/mrtrix3/commit/4a293d30e1c0686037ae637f67932d497eb71ee6.patch | patch -s -p1
 
 echo "Creating symlinks in /usr/local/bin ..."
 cd /usr/local/bin
