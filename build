@@ -1,6 +1,7 @@
 #!/bin/bash -ex
 
 TAGNAME="$1"
+QT_SPECIFIED="$2"
 
 PATH=/bin:/sbin:/usr/bin:/usr/sbin
 export PATH
@@ -30,9 +31,14 @@ else
   FFTW_VERSION=${FFTW_VERSION#*/*/fftw-}
   echo "Using fftw ${FFTW_VERSION}"
 
-  QT_VERSION=$(git ls-remote --tags https://code.qt.io/qt/qt5.git | awk '{print $2}' | grep -v '\^{}$' | grep -v alpha | grep -v beta | grep -v rc | grep -v '-' | grep '5.' | sort -V | tail -1)
-  QT_VERSION=${QT_VERSION#*/*/v}
-  echo "Using qt ${QT_VERSION}"
+  if [ -n "${QT_SPECIFIED}" ]; then
+    QT_VERSION="${QT_SPECIFIED}"
+    echo "Using user-specified qt ${QT_VERSION}"
+  else
+    QT_VERSION=$(git ls-remote --tags https://code.qt.io/qt/qt5.git | awk '{print $2}' | grep -v '\^{}$' | grep -v alpha | grep -v beta | grep -v rc | grep -v '-' | grep '5.' | sort -V | tail -1)
+    QT_VERSION=${QT_VERSION#*/*/v}
+    echo "Using auto-detected qt ${QT_VERSION}"
+  fi
 
   # EIGEN
   SECONDS=0
