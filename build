@@ -99,7 +99,7 @@ else
   SECONDS=0
   DNAME=qtbase-everywhere-src-${QT_VERSION}
   FNAME=${DNAME}.tar.xz
-  curl -s -O http://ftp.nluug.nl/languages/qt/archive/qt/${QT_VERSION%.*}/${QT_VERSION}/submodules/${FNAME}
+  curl -s -O https://ftp.nluug.nl/languages/qt/archive/qt/${QT_VERSION%.*}/${QT_VERSION}/submodules/${FNAME}
   tar xf ${FNAME}
   cd ${DNAME}
   curl -s -O https://raw.githubusercontent.com/wrobelda/vcpkg/99582d154236b0e7af70cadef8420c4f25829f61/ports/qt5-base/patches/cocoa.patch
@@ -115,7 +115,7 @@ else
   SECONDS=0
   DNAME=qtsvg-everywhere-src-${QT_VERSION}
   FNAME=${DNAME}.tar.xz
-  curl -s -O http://ftp1.nluug.nl/languages/qt/archive/qt/${QT_VERSION%.*}/${QT_VERSION}/submodules/${FNAME}
+  curl -s -O https://ftp.nluug.nl/languages/qt/archive/qt/${QT_VERSION%.*}/${QT_VERSION}/submodules/${FNAME}
   tar xf ${FNAME}
   cd ${DNAME}
   ${PREFIX}/bin/qmake
