@@ -4,7 +4,11 @@ TAGNAME="$1"
 QT_SPECIFIED="$2"
 EXTRA_PATH="$3"
 
-PATH=/bin:/sbin:/usr/bin:/usr/sbin:${EXTRA_PATH}
+PATH=/bin:/sbin:/usr/bin:/usr/sbin
+if [ -n "${EXTRA_PATH}" ]; then
+  PATH=${PATH}:${EXTRA_PATH}
+fi
+
 export PATH
 MACOSX_DEPLOYMENT_TARGET=10.13
 export MACOSX_DEPLOYMENT_TARGET
