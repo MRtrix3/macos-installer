@@ -100,34 +100,67 @@ else
   rm -r ${FNAME} ${DNAME}
   FFTW_SECONDS=${SECONDS}
 
+
+  IFS=. read -r maj min pat <<< "$QT_VERSION"
+  IFS=. read -r rq_maj rq_min rq_pat <<< "5.15.9"
+  QT_GREATER_EQUAL_5_15_9=$(( 
+      maj  > rq_maj \
+    || (maj == rq_maj && min  > rq_min) \
+    || (maj == rq_maj && min == rq_min && pat >= rq_pat) 
+  ))
+
   # QT5 BASE
   SECONDS=0
   DNAME=qtbase-everywhere-src-${QT_VERSION}
+  if (( QT_GREATER_EQUAL_5_15_9 )); then
+    DNAME=qtbase-everywhere-opensource-src-${QT_VERSION}
+  fi
   FNAME=${DNAME}.tar.xz
   curl -s -O https://ftp.nluug.nl/languages/qt/archive/qt/${QT_VERSION%.*}/${QT_VERSION}/submodules/${FNAME}
   tar xf ${FNAME}
-  cd ${DNAME}
-  curl -s -O https://raw.githubusercontent.com/wrobelda/vcpkg/99582d154236b0e7af70cadef8420c4f25829f61/ports/qt5-base/patches/cocoa.patch
-  patch -p1 < cocoa.patch
-  ./configure -opensource -confirm-license -release -no-dbus -no-openssl -no-harfbuzz -no-freetype  -no-cups -no-framework -nomake examples -prefix ${PREFIX}
+  # The top folder name is not always the same as the tarball name
+  QTBASE_TOP_FOLDER=$(tar -tf ${FNAME} | head -1 | cut -d '/' -f 1)
+  cd ${QTBASE_TOP_FOLDER}
+  QT_BUILD_FLAGS=(
+    -opensource
+    -confirm-license
+    -release
+    -no-dbus
+    -no-openssl
+    -no-harfbuzz
+    -no-freetype
+    -no-cups
+    -no-framework
+    -nomake examples
+    -prefix "${PREFIX}"
+  )
+  if (( QT_GREATER_EQUAL_5_15_9 )); then
+    QT_BUILD_FLAGS+=(-device-option QMAKE_APPLE_DEVICE_ARCHS='x86_64 arm64')
+  fi
+  ./configure "${QT_BUILD_FLAGS[@]}"
   make -j ${THREADS} > /dev/null
   make install > /dev/null
   cd ..
-  rm -r ${FNAME} ${DNAME}
+  rm -r ${FNAME} ${QTBASE_TOP_FOLDER}
   QTBASE_SECONDS=${SECONDS}
 
   # QT5 SVG
   SECONDS=0
   DNAME=qtsvg-everywhere-src-${QT_VERSION}
+  if (( QT_GREATER_EQUAL_5_15_9 )); then
+    DNAME=qtsvg-everywhere-opensource-src-${QT_VERSION}
+  fi
   FNAME=${DNAME}.tar.xz
   curl -s -O https://ftp.nluug.nl/languages/qt/archive/qt/${QT_VERSION%.*}/${QT_VERSION}/submodules/${FNAME}
   tar xf ${FNAME}
-  cd ${DNAME}
+  # The top folder name is not always the same as the tarball name
+  QTSVG_TOP_FOLDER=$(tar -tf ${FNAME} | head -1 | cut -d '/' -f 1)
+  cd ${QTSVG_TOP_FOLDER}
   ${PREFIX}/bin/qmake
   make -j ${THREADS} > /dev/null
   make install > /dev/null
   cd ..
-  rm -r ${FNAME} ${DNAME}
+  rm -r ${FNAME} ${QTSVG_TOP_FOLDER}
   QTSVG_SECONDS=${SECONDS}
 
   tar cpfz ${PREFIX}-build-deps.tar.gz mrtrix3
