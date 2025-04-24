@@ -64,7 +64,7 @@ else
   curl -s -O -L http://download.osgeo.org/libtiff/${FNAME}
   tar xf ${FNAME}
   cd ${DNAME}
-  ./configure -q -prefix ${PREFIX} --enable-shared=NO --without-x --disable-jpeg --disable-old-jpeg --disable-lzma --disable-zstd --disable-webp
+  CFLAGS="-arch arm64 -arch x86_64 -mmacosx-version-min=${MACOSX_DEPLOYMENT_TARGET}" ./configure -q -prefix ${PREFIX} --enable-shared=NO --without-x --disable-jpeg --disable-old-jpeg --disable-lzma --disable-zstd --disable-webp
   make install > /dev/null
   cd ..
   rm -r ${FNAME} ${DNAME}
@@ -77,7 +77,7 @@ else
   curl -s -O -L https://ftp.osuosl.org/pub/blfs/conglomeration/libpng/${FNAME}
   tar xf ${FNAME}
   cd ${DNAME}
-  ./configure -q -prefix ${PREFIX} --enable-shared=NO
+  CFLAGS="-arch arm64 -arch x86_64 -mmacosx-version-min=${MACOSX_DEPLOYMENT_TARGET}" ./configure -q -prefix ${PREFIX} --enable-shared=NO
   make install > /dev/null
   cd ..
   rm -r ${FNAME} ${DNAME}
@@ -91,9 +91,9 @@ else
   tar xf ${FNAME}
   cd ${DNAME}
   if [ "$(arch)" != "arm64" ]; then
-    ./configure -q -prefix ${PREFIX} --disable-doc --disable-fortran --disable-debug --enable-threads --disable-dependency-tracking --enable-sse2 --enable-avx --enable-avx2
+    CFLAGS="-arch arm64 -arch x86_64 -mmacosx-version-min=${MACOSX_DEPLOYMENT_TARGET}" ./configure -q -prefix ${PREFIX} --disable-doc --disable-fortran --disable-debug --enable-threads --disable-dependency-tracking --enable-sse2 --enable-avx --enable-avx2
   else
-    ./configure -q -prefix ${PREFIX} --disable-doc --disable-fortran --disable-debug --enable-threads --disable-dependency-tracking
+    CFLAGS="-arch arm64 -arch x86_64 -mmacosx-version-min=${MACOSX_DEPLOYMENT_TARGET}" ./configure -q -prefix ${PREFIX} --disable-doc --disable-fortran --disable-debug --enable-threads --disable-dependency-tracking
   fi
   make install > /dev/null
   cd ..
