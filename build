@@ -52,7 +52,13 @@ else
     || (maj == rq_maj && min  > rq_min) \
     || (maj == rq_maj && min == rq_min && pat >= rq_pat) 
   ))
-  MACOS_UNIVERSAL_FLAGS="-arch arm64 -arch x86_64 -mmacosx-version-min=${MACOSX_DEPLOYMENT_TARGET}"
+  MACOS_UNIVERSAL_FLAGS=""
+  if (( QT_GREATER_EQUAL_5_15_9 )); then
+    echo "Qt version >= 5.15.9 detected, using universal build flags"
+    MACOS_UNIVERSAL_FLAGS="-arch arm64 -arch x86_64 -mmacosx-version-min=${MACOSX_DEPLOYMENT_TARGET}"
+  else
+    echo "Qt version < 5.15.9 detected, disabling universal build flags"
+  fi
 
   # EIGEN
   SECONDS=0
